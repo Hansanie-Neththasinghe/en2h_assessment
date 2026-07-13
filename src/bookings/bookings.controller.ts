@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, UseGuards, Query } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingStatusDto } from './dto/update-booking-status.dto';
+import { GetBookingsFilterDto } from './dto/get-bookings-filter.dto';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -21,9 +22,9 @@ export class BookingsController {
   @Get()
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Get all bookings' })
-  findAll() {
-    return this.bookingsService.findAll();
+  @ApiOperation({ summary: 'Get all bookings (with pagination, search, filter)' })
+  findAll(@Query() filterDto: GetBookingsFilterDto) {
+    return this.bookingsService.findAll(filterDto);
   }
 
   @Get(':id')
