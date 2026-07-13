@@ -13,7 +13,9 @@ import { BookingsModule } from './bookings/bookings.module';
       type: 'better-sqlite3',
       database: 'database.sqlite',
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false, // Disabled so TypeORM relies on the migration file instead
+      migrationsRun: true, // Automatically runs pending migrations when the app starts
+      migrations: [__dirname + '/migrations/*{.ts,.js}'], // Tells TypeORM where to find the migrations
     }),
     UsersModule,
     AuthModule,

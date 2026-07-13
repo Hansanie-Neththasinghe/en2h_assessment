@@ -56,10 +56,12 @@ $ npm run start:dev
 
 ## Running Migrations
 
-Because this project utilizes `TypeORM` with `synchronize: true` for the SQLite development environment, **database tables are automatically generated and synchronized** upon application startup. 
-
-
-## API Documentation
+This project utilizes explicit TypeORM migration files rather than automatic synchronization.
+- **Auto-execution:** The application is configured with `migrationsRun: true` in `app.module.ts`. This means that whenever the application starts, it will automatically detect and execute any pending migration files located in `src/migrations/`.
+- **Manual execution:** You can also run migrations manually using the CLI:
+  ```bash
+  npm run migration:run
+  ```
 
 Swagger has been integrated into the project for interactive API documentation and testing.
 Once the application is running, navigate to:
