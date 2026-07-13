@@ -10,7 +10,7 @@ import { BookingsModule } from './bookings/bookings.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'sqlite',
+      type: 'better-sqlite3',
       database: 'database.sqlite',
       autoLoadEntities: true,
       synchronize: true,
