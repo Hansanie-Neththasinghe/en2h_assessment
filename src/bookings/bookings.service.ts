@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Booking, BookingStatus } from './booking.entity';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingStatusDto } from './dto/update-booking-status.dto';
+import { GetBookingsFilterDto } from './dto/get-bookings-filter.dto';
 import { ServicesService } from '../services/services.service';
 
 @Injectable()
@@ -44,8 +45,34 @@ export class BookingsService {
     return this.bookingRepository.save(booking);
   }
 
-  async findAll(): Promise<Booking[]> {
-    return this.bookingRepository.find({ relations: { service: true } });
+  async findAll(filterDto: GetBookingsFilterDto): Promise<{ data: Booking[], total: number, page: number, limit: number }> {
+    const { status, search, page = 1, limit = 10 } = filterDto;
+    
+    const query = this.bookingRepository.createQueryBuilder('booking')
+      .leftJoinAndSelect('booking.service', 'service');
+
+    if (status) {
+      query.andWhere('booking.status = :status', { status });
+    }
+
+    if (search) {
+      query.andWhere(
+        '(LOWER(booking.customerName) LIKE LOWER(:search) OR LOWER(booking.customerEmail) LIKE LOWER(:search))',
+        { search: `%${search}%` }
+      );
+    }
+
+    const skip = (page - 1) * limit;
+    query.skip(skip).take(limit);
+
+    const [data, total] = await query.getManyAndCount();
+
+    return {
+      data,
+      total,
+      page,
+      limit,
+    };
   }
 
   async findOne(id: string): Promise<Booking> {
