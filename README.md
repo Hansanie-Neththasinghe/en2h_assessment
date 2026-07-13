@@ -50,14 +50,14 @@ This project uses **SQLite** as the database to ensure a seamless, zero-configur
 # development
 $ npm run start
 
-# watch mode (recommended for development)
+# watch mode
 $ npm run start:dev
 ```
 
 ## Running Migrations
 
 Because this project utilizes `TypeORM` with `synchronize: true` for the SQLite development environment, **database tables are automatically generated and synchronized** upon application startup. 
-*Note: In a production environment, `synchronize` should be disabled and explicit TypeORM migration files should be generated and run.*
+
 
 ## API Documentation
 
@@ -70,13 +70,12 @@ From there, you can view all endpoints, test payloads, and authenticate using th
 ---
 
 ## Assumptions Made
-1. **Public Bookings:** As per the prompt, customers can book without authentication. It is assumed that identifying customers relies entirely on the email/phone provided in the DTO, rather than a logged-in user session.
-2. **Admin Role:** The prompt states "Authenticated users should be able to manage services". It is assumed that any user who successfully registers and logs in has administrative privileges for the scope of this MVP.
+1. **Public Bookings:** It is assumed that identifying customers relies entirely on the email/phone provided in the DTO, rather than a logged-in user session.
+2. **Admin Role:** The assessment states "Authenticated users should be able to manage services". It is assumed that any user who successfully registers and logs in has administrative privileges for the scope of this MVP.
 3. **Database Choice:** SQLite was chosen over PostgreSQL for the submission to ensure the evaluator can run the API instantly without needing to configure local Postgres credentials or Docker containers.
 
 ## Future Improvements
 - Implement a formal Role-Based Access Control (RBAC) system with distinct `ADMIN` and `CUSTOMER` roles.
 - Migrate database to PostgreSQL via Docker Compose for production readiness.
 - Add TypeORM Migration generation scripts.
-- Add Pagination to the `GET /bookings` and `GET /services` endpoints.
-- Add automated Unit Tests and E2E Tests using Jest.
+
